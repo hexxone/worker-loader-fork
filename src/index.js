@@ -1,6 +1,6 @@
 import path from "path";
 
-import { getOptions } from "loader-utils";
+import { getOptions } from "../loader-utils-fork";
 import { validate } from "schema-utils";
 
 import NodeTargetPlugin from "webpack/lib/node/NodeTargetPlugin";
