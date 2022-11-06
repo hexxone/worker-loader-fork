@@ -10,7 +10,7 @@ function isRelativePath(str) {
 	return matchRelativePath.test(str);
 }
 
-function stringifyRequest(loaderContext, request) {
+export default function stringifyRequest(loaderContext, request) {
 	const splitted = request.split("!");
 	const context =
 		loaderContext.context ||
@@ -45,5 +45,3 @@ function stringifyRequest(loaderContext, request) {
 			.join("!")
 	);
 }
-
-module.exports = stringifyRequest;

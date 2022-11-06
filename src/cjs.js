@@ -1,4 +1,6 @@
-const loader = require("./index");
+// eslint-disable-next-line import/no-namespace
+import * as Index from "./index";
 
-module.exports = loader.default;
-module.exports.pitch = loader.pitch;
+export default Index.default;
+
+export const { pitch } = Index;

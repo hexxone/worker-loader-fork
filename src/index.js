@@ -7,14 +7,15 @@ import SingleEntryPlugin from "webpack/lib/SingleEntryPlugin";
 import WebWorkerTemplatePlugin from "webpack/lib/webworker/WebWorkerTemplatePlugin";
 import ExternalsPlugin from "webpack/lib/ExternalsPlugin";
 
+// wasm Plugins
+import FetchCompileWasmPlugin from "webpack/lib/web/FetchCompileWasmPlugin";
+import FetchCompileAsyncWasmPlugin from "webpack/lib/web/FetchCompileAsyncWasmPlugin";
+
 import schema from "./options.json";
 import supportWebpack5 from "./supportWebpack5";
 
 import { getExternalsType } from "./utils";
-import { getOptions } from "./getOptions";
-
-const FetchCompileWasmPlugin = require("webpack/lib/web/FetchCompileWasmPlugin");
-const FetchCompileAsyncWasmPlugin = require("webpack/lib/web/FetchCompileAsyncWasmPlugin");
+import getOptions from "./getOptions";
 
 const useWebpack5 = require("webpack/package.json").version.startsWith("5.");
 
