@@ -12,6 +12,13 @@ Unfortunately, the new system isn't well documented and simply refuses to work p
 
 So here I am, forking this whole thing in order to change 2 lines of code and make it working for v5.
 
+## Fork Changes
+
+- Removed forced `.worker.` name insert on output.
+- Removed compatibility for webpack v4
+- Added `getOptions` from `loader-utils`
+- Added hacky fix for getting inline `query` param of an import for webpack v5
+
 ## Getting Started
 
 To begin, you'll need to install `worker-loader`:
@@ -20,35 +27,55 @@ To begin, you'll need to install `worker-loader`:
 git submodule add https://github.com/hexxone/worker-loader-fork.git src/worker-loader-fork
 ```
 
-### Inlined
+Afterwards you can choose `Inline` or `Config` usage.
+Whereas `Inline` files will be processed first.
+
+### Inline usage
 
 - **App.js**
 
 ```js
-import Worker from "worker-loader!./Worker.js";
+import Worker from "worker-loader!./My.Worker.(t|j)s?filename=my.named.worker.js";
 ```
-
-### Config
 
 - **webpack.config.js**
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.js$/,
-        use: { loader: "src/worker-loader-fork/src/index.js" },
-      },
-    ],
-  },
+	resolveLoader: {
+		alias: {
+			"worker-loader": "src/worker-loader-fork/dist",
+		},
+	},
+};
+```
+
+### Config Rule usage
+
+- **webpack.config.js**
+
+```js
+module.exports = {
+	module: {
+		rules: [
+			{
+				test: /\.worker\.js$/,
+				loader: "src/worker-loader-fork/dist",
+				options: {
+					esModule: true,
+					filename: "foo.[name].worker.js",
+					chunkFilename: "bar.[name].worker.js",
+				},
+			},
+		],
+	},
 };
 ```
 
 - **App.js**
 
 ```js
-import Worker from "./file.worker.js";
+import Worker from "./My.Worker.(t|j)s?filename=my.named.worker.js";
 
 const worker = new Worker();
 
@@ -86,17 +113,17 @@ Allows to set web worker constructor name.
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          worker: "SharedWorker",
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					worker: "SharedWorker",
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -108,24 +135,24 @@ Allow to set web worker constructor name and options.
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          worker: {
-            type: "SharedWorker",
-            options: {
-              type: "classic",
-              credentials: "omit",
-              name: "my-custom-worker-name",
-            },
-          },
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					worker: {
+						type: "SharedWorker",
+						options: {
+							type: "classic",
+							credentials: "omit",
+							name: "my-custom-worker-name",
+						},
+					},
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -143,17 +170,17 @@ If not specified, the same public path used for other webpack assets is used.
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          publicPath: "/scripts/workers/",
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					publicPath: "/scripts/workers/",
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -163,19 +190,19 @@ module.exports = {
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          publicPath: (pathData, assetInfo) => {
-            return `/scripts/${pathData.hash}/workers/`;
-          },
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					publicPath: (pathData, assetInfo) => {
+						return `/scripts/${pathData.hash}/workers/`;
+					},
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -192,17 +219,17 @@ The filename of entry chunks for web workers.
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          filename: "[name].[contenthash].worker.js",
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					filename: "[name].[contenthash].worker.js",
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -212,25 +239,25 @@ module.exports = {
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          filename: (pathData) => {
-            if (
-              /\.worker\.(c|m)?js$/i.test(pathData.chunk.entryModule.resource)
-            ) {
-              return "[name].custom.worker.js";
-            }
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					filename: (pathData) => {
+						if (
+							/\.worker\.(c|m)?js$/i.test(pathData.chunk.entryModule.resource)
+						) {
+							return "[name].custom.worker.js";
+						}
 
-            return "[name].js";
-          },
-        },
-      },
-    ],
-  },
+						return "[name].js";
+					},
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -245,17 +272,17 @@ The filename of non-entry chunks for web workers.
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          chunkFilename: "[id].[contenthash].worker.js",
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					chunkFilename: "[id].[contenthash].worker.js",
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -272,17 +299,17 @@ Inline mode with the `fallback` value will create file for browsers without supp
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          inline: "fallback",
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					inline: "fallback",
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -299,17 +326,17 @@ You can enable a CommonJS modules syntax using:
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          esModule: false,
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					esModule: false,
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -329,20 +356,20 @@ var worker = new Worker();
 var result;
 
 worker.onmessage = function (event) {
-  if (!result) {
-    result = document.createElement("div");
-    result.setAttribute("id", "result");
+	if (!result) {
+		result = document.createElement("div");
+		result.setAttribute("id", "result");
 
-    document.body.append(result);
-  }
+		document.body.append(result);
+	}
 
-  result.innerText = JSON.stringify(event.data);
+	result.innerText = JSON.stringify(event.data);
 };
 
 const button = document.getElementById("button");
 
 button.addEventListener("click", function () {
-  worker.postMessage({ postMessage: true });
+	worker.postMessage({ postMessage: true });
 });
 ```
 
@@ -350,11 +377,11 @@ button.addEventListener("click", function () {
 
 ```js
 onmessage = function (event) {
-  var workerResult = event.data;
+	var workerResult = event.data;
 
-  workerResult.onmessage = true;
+	workerResult.onmessage = true;
 
-  postMessage(workerResult);
+	postMessage(workerResult);
 };
 ```
 
@@ -362,17 +389,17 @@ onmessage = function (event) {
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        loader: "worker-loader",
-        options: {
-          esModule: false,
-        },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				loader: "worker-loader",
+				options: {
+					esModule: false,
+				},
+			},
+		],
+	},
 };
 ```
 
@@ -390,20 +417,20 @@ const worker = new Worker();
 let result;
 
 worker.onmessage = (event) => {
-  if (!result) {
-    result = document.createElement("div");
-    result.setAttribute("id", "result");
+	if (!result) {
+		result = document.createElement("div");
+		result.setAttribute("id", "result");
 
-    document.body.append(result);
-  }
+		document.body.append(result);
+	}
 
-  result.innerText = JSON.stringify(event.data);
+	result.innerText = JSON.stringify(event.data);
 };
 
 const button = document.getElementById("button");
 
 button.addEventListener("click", () => {
-  worker.postMessage({ postMessage: true });
+	worker.postMessage({ postMessage: true });
 });
 ```
 
@@ -411,11 +438,11 @@ button.addEventListener("click", () => {
 
 ```js
 onmessage = function (event) {
-  const workerResult = event.data;
+	const workerResult = event.data;
 
-  workerResult.onmessage = true;
+	workerResult.onmessage = true;
 
-  postMessage(workerResult);
+	postMessage(workerResult);
 };
 ```
 
@@ -423,24 +450,24 @@ onmessage = function (event) {
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.worker\.(c|m)?js$/i,
-        use: [
-          {
-            loader: "worker-loader",
-          },
-          {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-env"],
-            },
-          },
-        ],
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.worker\.(c|m)?js$/i,
+				use: [
+					{
+						loader: "worker-loader",
+					},
+					{
+						loader: "babel-loader",
+						options: {
+							presets: ["@babel/preset-env"],
+						},
+					},
+				],
+			},
+		],
+	},
 };
 ```
 
@@ -454,14 +481,14 @@ To integrate with TypeScript, you will need to define a custom module for the ex
 
 ```typescript
 declare module "worker-loader!*" {
-  // You need to change `Worker`, if you specified a different value for the `workerType` option
-  class WebpackWorker extends Worker {
-    constructor();
-  }
+	// You need to change `Worker`, if you specified a different value for the `workerType` option
+	class WebpackWorker extends Worker {
+		constructor();
+	}
 
-  // Uncomment this if you set the `esModule` option to `false`
-  // export = WebpackWorker;
-  export default WebpackWorker;
+	// Uncomment this if you set the `esModule` option to `false`
+	// export = WebpackWorker;
+	export default WebpackWorker;
 }
 ```
 
@@ -500,14 +527,14 @@ This is useful for executing the code using a non-WebPack runtime environment
 
 ```typescript
 declare module "*.worker.ts" {
-  // You need to change `Worker`, if you specified a different value for the `workerType` option
-  class WebpackWorker extends Worker {
-    constructor();
-  }
+	// You need to change `Worker`, if you specified a different value for the `workerType` option
+	class WebpackWorker extends Worker {
+		constructor();
+	}
 
-  // Uncomment this if you set the `esModule` option to `false`
-  // export = WebpackWorker;
-  export default WebpackWorker;
+	// Uncomment this if you set the `esModule` option to `false`
+	// export = WebpackWorker;
+	export default WebpackWorker;
 }
 ```
 
@@ -540,22 +567,22 @@ worker.addEventListener("message", (event) => {});
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      // Place this *before* the `ts-loader`.
-      {
-        test: /\.worker\.ts$/,
-        loader: "worker-loader",
-      },
-      {
-        test: /\.ts$/,
-        loader: "ts-loader",
-      },
-    ],
-  },
-  resolve: {
-    extensions: [".ts", ".js"],
-  },
+	module: {
+		rules: [
+			// Place this *before* the `ts-loader`.
+			{
+				test: /\.worker\.ts$/,
+				loader: "worker-loader",
+			},
+			{
+				test: /\.ts$/,
+				loader: "ts-loader",
+			},
+		],
+	},
+	resolve: {
+		extensions: [".ts", ".js"],
+	},
 };
 ```
 
@@ -579,14 +606,14 @@ import Worker from "./file.worker.js";
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        loader: "worker-loader",
-        options: { inline: "fallback" },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				loader: "worker-loader",
+				options: { inline: "fallback" },
+			},
+		],
+	},
 };
 ```
 
@@ -603,14 +630,14 @@ import Worker from "./file.worker.js";
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        loader: "worker-loader",
-        options: { publicPath: "/workers/" },
-      },
-    ],
-  },
+	module: {
+		rules: [
+			{
+				loader: "worker-loader",
+				options: { publicPath: "/workers/" },
+			},
+		],
+	},
 };
 ```
 

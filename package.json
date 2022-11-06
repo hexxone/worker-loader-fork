@@ -1,79 +1,77 @@
 {
-  "name": "worker-loader",
-  "version": "3.0.9",
-  "description": "worker loader fork module for webpack",
-  "license": "MIT",
-  "repository": "webpack-contrib/worker-loader",
-  "author": "Tobias Koppers @sokra",
-  "homepage": "https://github.com/webpack-contrib/worker-loader",
-  "bugs": "https://github.com/webpack-contrib/worker-loader/issues",
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/webpack"
-  },
-  "main": "dist/cjs.js",
-  "engines": {
-    "node": ">= 10.13.0"
-  },
-  "scripts": {
-    "start": "npm run build -- -w",
-    "clean": "del-cli dist",
-    "prebuild": "npm run clean",
-    "build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
-    "commitlint": "commitlint --from=master",
-    "security": "npm audit",
-    "lint:prettier": "prettier --list-different .",
-    "lint:js": "eslint --cache .",
-    "lint": "npm-run-all -l -p \"lint:**\"",
-    "test:only": "cross-env NODE_ENV=test jest",
-    "test:watch": "npm run test:only -- --watch",
-    "test:coverage": "npm run test:only -- --collectCoverageFrom=\"src/**/*.js\" --coverage",
-    "pretest": "npm run lint",
-    "test": "npm run test:coverage",
-    "prepare": "npm run build",
-    "release": "standard-version"
-  },
-  "files": [
-    "dist"
-  ],
-  "peerDependencies": {
-    "webpack": "^4.0.0 || ^5.0.0"
-  },
-  "dependencies": {
-    "schema-utils": "^3.1.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.14.5",
-    "@babel/core": "^7.14.6",
-    "@babel/preset-env": "^7.14.7",
-    "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
-    "@webpack-contrib/eslint-config-webpack": "^3.0.0",
-    "babel-jest": "^26.6.3",
-    "cross-env": "^7.0.3",
-    "del": "^6.0.0",
-    "del-cli": "^3.0.1",
-    "eslint": "^7.31.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.4",
-    "express": "^4.17.1",
-    "get-port": "^5.1.1",
-    "html-webpack-plugin": "^4.5.0",
-    "husky": "^4.3.0",
-    "jest": "^26.6.3",
-    "lint-staged": "^10.5.4",
-    "memfs": "^3.2.0",
-    "nanoid": "^3.1.20",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.3.2",
-    "puppeteer": "^7.0.4",
-    "standard-version": "^9.3.1",
-    "webpack": "^5.45.1"
-  },
-  "keywords": [
-    "webpack"
-  ],
-  "jest": {
-    "testEnvironment": "node"
-  }
+	"name": "worker-loader",
+	"version": "3.0.9",
+	"description": "worker loader fork module for webpack",
+	"license": "MIT",
+	"repository": "webpack-contrib/worker-loader",
+	"author": "Tobias Koppers @sokra",
+	"homepage": "https://github.com/webpack-contrib/worker-loader",
+	"bugs": "https://github.com/webpack-contrib/worker-loader/issues",
+	"funding": {
+		"type": "opencollective",
+		"url": "https://opencollective.com/webpack"
+	},
+	"main": "dist/cjs.js",
+	"engines": {
+		"node": ">= 10.13.0"
+	},
+	"scripts": {
+		"start": "npm run build -- -w",
+		"clean": "del-cli dist",
+		"prebuild": "npm run clean",
+		"build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
+		"commitlint": "commitlint --from=master",
+		"security": "npm audit",
+		"lint:prettier": "prettier --list-different .",
+		"lint:js": "eslint --cache .",
+		"lint": "npm-run-all -l -p \"lint:**\"",
+		"test:only": "cross-env NODE_ENV=test jest",
+		"test:watch": "npm run test:only -- --watch",
+		"test:coverage": "npm run test:only -- --collectCoverageFrom=\"src/**/*.js\" --coverage",
+		"pretest": "npm run lint",
+		"test": "npm run test:coverage",
+		"prepare": "npm run build",
+		"release": "standard-version"
+	},
+	"files": [
+		"dist"
+	],
+	"peerDependencies": {
+		"webpack": "^4.0.0 || ^5.0.0"
+	},
+	"dependencies": {
+		"json5": "^2.2.1",
+		"schema-utils": "^3.1.0"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.14.5",
+		"@babel/core": "^7.14.6",
+		"@babel/preset-env": "^7.14.7",
+		"@commitlint/cli": "^12.1.4",
+		"@commitlint/config-conventional": "^12.1.4",
+		"@webpack-contrib/eslint-config-webpack": "^3.0.0",
+		"babel-jest": "^26.6.3",
+		"cross-env": "^7.0.3",
+		"del": "^6.0.0",
+		"del-cli": "^3.0.1",
+		"eslint": "^7.31.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-import": "^2.23.4",
+		"get-port": "^5.1.1",
+		"html-webpack-plugin": "^5.5.0",
+		"husky": "^4.3.0",
+		"jest": "^26.6.3",
+		"lint-staged": "^10.5.4",
+		"memfs": "^3.2.0",
+		"nanoid": "^3.1.20",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^2.3.2",
+		"webpack": "^5.45.1"
+	},
+	"keywords": [
+		"webpack"
+	],
+	"jest": {
+		"testEnvironment": "node"
+	}
 }
