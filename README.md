@@ -12,13 +12,13 @@
 [![chat][chat]][chat-url]
 [![size][size]][size-url]
 
-# worker-loader
+# worker-loader-fork
 
-**DEPRECATED for v5**: https://webpack.js.org/guides/web-workers/
+**ORIGINAL WAS DEPRECATED for Webpack v5**: https://webpack.js.org/guides/web-workers/
 
-Web Worker loader for webpack 4.
+Unfortunately, the new system isn't well documented and simply refuses to work properly with TypeScript.
 
-Note that this is specific to webpack 4. To use Web Workers in webpack 5, see https://webpack.js.org/guides/web-workers/.
+So here I am, forking this whole thing in order to change 2 lines of code and make it working for v5.
 
 ## Getting Started
 
