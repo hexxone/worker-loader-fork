@@ -4,17 +4,9 @@
   </a>
 </div>
 
-[![npm][npm]][npm-url]
-[![node][node]][node-url]
-[![deps][deps]][deps-url]
-[![tests][tests]][tests-url]
-[![coverage][cover]][cover-url]
-[![chat][chat]][chat-url]
-[![size][size]][size-url]
-
 # worker-loader-fork
 
-**ORIGINAL WAS DEPRECATED for Webpack v5**: https://webpack.js.org/guides/web-workers/
+**ORIGINAL WAS DEPRECATED for Webpack v5**: <https://webpack.js.org/guides/web-workers/>
 
 Unfortunately, the new system isn't well documented and simply refuses to work properly with TypeScript.
 
@@ -25,12 +17,12 @@ So here I am, forking this whole thing in order to change 2 lines of code and ma
 To begin, you'll need to install `worker-loader`:
 
 ```console
-$ npm install worker-loader --save-dev
+git submodule add https://github.com/hexxone/worker-loader-fork.git src/worker-loader-fork
 ```
 
 ### Inlined
 
-**App.js**
+- **App.js**
 
 ```js
 import Worker from "worker-loader!./Worker.js";
@@ -38,7 +30,7 @@ import Worker from "worker-loader!./Worker.js";
 
 ### Config
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -46,14 +38,14 @@ module.exports = {
     rules: [
       {
         test: /\.worker\.js$/,
-        use: { loader: "worker-loader" },
+        use: { loader: "src/worker-loader-fork/src/index.js" },
       },
     ],
   },
 };
 ```
 
-**App.js**
+- **App.js**
 
 ```js
 import Worker from "./file.worker.js";
@@ -90,7 +82,7 @@ Set the worker type.
 
 Allows to set web worker constructor name.
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -112,7 +104,7 @@ module.exports = {
 
 Allow to set web worker constructor name and options.
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -147,7 +139,7 @@ If not specified, the same public path used for other webpack assets is used.
 
 #### `String`
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -167,7 +159,7 @@ module.exports = {
 
 #### `Function`
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -196,7 +188,7 @@ The filename of entry chunks for web workers.
 
 #### `String`
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -216,7 +208,7 @@ module.exports = {
 
 #### `Function`
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -249,7 +241,7 @@ Default: based on `output.chunkFilename`, adding `worker` suffix, for example - 
 
 The filename of non-entry chunks for web workers.
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -276,7 +268,7 @@ Allow to inline the worker as a `BLOB`.
 
 Inline mode with the `fallback` value will create file for browsers without support web workers, to disable this behavior just use `no-fallback` value.
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -303,7 +295,7 @@ By default, `worker-loader` generates JS modules that use the ES modules syntax.
 
 You can enable a CommonJS modules syntax using:
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -327,7 +319,7 @@ module.exports = {
 
 The worker file can import dependencies just like any other file:
 
-**index.js**
+- **index.js**
 
 ```js
 import Worker from "./my.worker.js";
@@ -354,7 +346,7 @@ button.addEventListener("click", function () {
 });
 ```
 
-**my.worker.js**
+- **my.worker.js**
 
 ```js
 onmessage = function (event) {
@@ -366,7 +358,7 @@ onmessage = function (event) {
 };
 ```
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -388,7 +380,7 @@ module.exports = {
 
 You can even use ES6+ features if you have the [`babel-loader`](https://github.com/babel/babel-loader) configured.
 
-**index.js**
+- **index.js**
 
 ```js
 import Worker from "./my.worker.js";
@@ -415,7 +407,7 @@ button.addEventListener("click", () => {
 });
 ```
 
-**my.worker.js**
+- **my.worker.js**
 
 ```js
 onmessage = function (event) {
@@ -427,7 +419,7 @@ onmessage = function (event) {
 };
 ```
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -458,7 +450,7 @@ To integrate with TypeScript, you will need to define a custom module for the ex
 
 #### Loading with `worker-loader!`
 
-**typings/worker-loader.d.ts**
+- **typings/worker-loader.d.ts**
 
 ```typescript
 declare module "worker-loader!*" {
@@ -473,7 +465,7 @@ declare module "worker-loader!*" {
 }
 ```
 
-**my.worker.ts**
+- **my.worker.ts**
 
 ```typescript
 const ctx: Worker = self as any;
@@ -485,7 +477,7 @@ ctx.postMessage({ foo: "foo" });
 ctx.addEventListener("message", (event) => console.log(event));
 ```
 
-**index.ts**
+- **index.ts**
 
 ```typescript
 import Worker from "worker-loader!./Worker";
@@ -504,7 +496,7 @@ Alternatively, you can omit the `worker-loader!` prefix passed to `import` state
 This is useful for executing the code using a non-WebPack runtime environment
 (such as Jest with [`workerloader-jest-transformer`](https://github.com/astagi/workerloader-jest-transformer)).
 
-**typings/worker-loader.d.ts**
+- **typings/worker-loader.d.ts**
 
 ```typescript
 declare module "*.worker.ts" {
@@ -519,7 +511,7 @@ declare module "*.worker.ts" {
 }
 ```
 
-**my.worker.ts**
+- **my.worker.ts**
 
 ```typescript
 const ctx: Worker = self as any;
@@ -531,7 +523,7 @@ ctx.postMessage({ foo: "foo" });
 ctx.addEventListener("message", (event) => console.log(event));
 ```
 
-**index.ts**
+- **index.ts**
 
 ```typescript
 import MyWorker from "./my.worker.ts";
@@ -544,7 +536,7 @@ worker.onmessage = (event) => {};
 worker.addEventListener("message", (event) => {});
 ```
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -577,13 +569,13 @@ There are two workarounds:
 
 Firstly, you can inline the worker as a blob instead of downloading it as an external script via the [`inline`](#inline) parameter
 
-**App.js**
+- **App.js**
 
 ```js
 import Worker from "./file.worker.js";
 ```
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -600,14 +592,14 @@ module.exports = {
 
 Secondly, you may override the base download URL for your worker script via the [`publicPath`](#publicpath) option
 
-**App.js**
+- **App.js**
 
 ```js
 // This will cause the worker to be downloaded from `/workers/file.worker.js`
 import Worker from "./file.worker.js";
 ```
 
-**webpack.config.js**
+- **webpack.config.js**
 
 ```js
 module.exports = {
@@ -632,17 +624,17 @@ Please take a moment to read our contributing guidelines if you haven't yet done
 
 [MIT](./LICENSE)
 
-[npm]: https://img.shields.io/npm/v/worker-loader.svg
-[npm-url]: https://npmjs.com/package/worker-loader
-[node]: https://img.shields.io/node/v/worker-loader.svg
-[node-url]: https://nodejs.org
-[deps]: https://david-dm.org/webpack-contrib/worker-loader.svg
-[deps-url]: https://david-dm.org/webpack-contrib/worker-loader
-[tests]: https://github.com/webpack-contrib/worker-loader/workflows/worker-loader/badge.svg
-[tests-url]: https://github.com/webpack-contrib/worker-loader/actions
-[cover]: https://codecov.io/gh/webpack-contrib/worker-loader/branch/master/graph/badge.svg
-[cover-url]: https://codecov.io/gh/webpack-contrib/worker-loader
-[chat]: https://badges.gitter.im/webpack/webpack.svg
-[chat-url]: https://gitter.im/webpack/webpack
-[size]: https://packagephobia.now.sh/badge?p=worker-loader
-[size-url]: https://packagephobia.now.sh/result?p=worker-loader
+- [npm]: https://img.shields.io/npm/v/worker-loader.svg
+- [npm-url]: https://npmjs.com/package/worker-loader
+- [node]: https://img.shields.io/node/v/worker-loader.svg
+- [node-url]: https://nodejs.org
+- [deps]: https://david-dm.org/webpack-contrib/worker-loader.svg
+- [deps-url]: https://david-dm.org/webpack-contrib/worker-loader
+- [tests]: https://github.com/webpack-contrib/worker-loader/workflows/worker-loader/badge.svg
+- [tests-url]: https://github.com/webpack-contrib/worker-loader/actions
+- [cover]: https://codecov.io/gh/webpack-contrib/worker-loader/branch/master/graph/badge.svg
+- [cover-url]: https://codecov.io/gh/webpack-contrib/worker-loader
+- [chat]: https://badges.gitter.im/webpack/webpack.svg
+- [chat-url]: https://gitter.im/webpack/webpack
+- [size]: https://packagephobia.now.sh/badge?p=worker-loader
+- [size-url]: https://packagephobia.now.sh/result?p=worker-loader
