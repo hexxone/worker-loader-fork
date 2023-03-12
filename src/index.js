@@ -12,9 +12,14 @@ import FetchCompileWasmPlugin from "webpack/lib/web/FetchCompileWasmPlugin";
 import FetchCompileAsyncWasmPlugin from "webpack/lib/web/FetchCompileAsyncWasmPlugin";
 
 import schema from "./options.json";
-import supportWebpack5 from "./supportWebpack5";
 
-import { getExternalsType } from "./utils";
+import {
+	workerGenerator,
+	sourceMappingURLRegex,
+	sourceURLWebpackRegex,
+	getExternalsType,
+} from "./utils";
+
 import getOptions from "./getOptions";
 
 const useWebpack5 = require("webpack/package.json").version.startsWith("5.");
@@ -95,5 +100,90 @@ export function pitch(request) {
 
 	const cb = this.async();
 
-	supportWebpack5(this, workerContext, options, cb);
+	if (
+		!(
+			workerContext.compiler.cache &&
+			typeof workerContext.compiler.cache.get === "function"
+		)
+	)
+		// eslint-disable-next-line no-console
+		console.error("ERROR COMPILE", workerContext.compiler);
+
+	runAsChild(this, workerContext, options, cb);
+}
+
+export function runAsChild(loaderContext, workerContext, options, callback) {
+	workerContext.compiler.runAsChild((error, entries, compilation) => {
+		if (error) {
+			return callback(error);
+		}
+
+		if (entries[0]) {
+			const [workerFilename] = [...entries[0].files];
+			const cache = workerContext.compiler.getCache("worker-loader");
+			const cacheIdent = workerFilename;
+			const cacheETag = cache.getLazyHashedEtag(
+				compilation.assets[workerFilename]
+			);
+
+			return cache.get(cacheIdent, cacheETag, (getCacheError, content) => {
+				if (getCacheError) {
+					return callback(getCacheError);
+				}
+
+				if (options.inline === "no-fallback") {
+					// eslint-disable-next-line no-underscore-dangle, no-param-reassign
+					delete loaderContext._compilation.assets[workerFilename];
+
+					// TODO improve this, we should store generated source maps files for file in `assetInfo`
+					// eslint-disable-next-line no-underscore-dangle
+					if (loaderContext._compilation.assets[`${workerFilename}.map`]) {
+						// eslint-disable-next-line no-underscore-dangle, no-param-reassign
+						delete loaderContext._compilation.assets[`${workerFilename}.map`];
+					}
+				}
+
+				if (content) {
+					return callback(null, content);
+				}
+
+				let workerSource = compilation.assets[workerFilename].source();
+
+				if (options.inline === "no-fallback") {
+					// Remove `/* sourceMappingURL=url */` comment
+					workerSource = workerSource.replace(sourceMappingURLRegex, "");
+
+					// Remove `//# sourceURL=webpack-internal` comment
+					workerSource = workerSource.replace(sourceURLWebpackRegex, "");
+				}
+
+				const workerCode = workerGenerator(
+					loaderContext,
+					workerFilename,
+					workerSource,
+					options
+				);
+				const workerCodeBuffer = Buffer.from(workerCode);
+
+				return cache.store(
+					cacheIdent,
+					cacheETag,
+					workerCodeBuffer,
+					(storeCacheError) => {
+						if (storeCacheError) {
+							return callback(storeCacheError);
+						}
+
+						return callback(null, workerCodeBuffer);
+					}
+				);
+			});
+		}
+
+		return callback(
+			new Error(
+				`Failed to compile web worker "${workerContext.request}" request`
+			)
+		);
+	});
 }
