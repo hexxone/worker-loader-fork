@@ -28,7 +28,14 @@ if (!useWebpack5) {
 	throw new Error("Please upgrade to webpack 5, or use the non-forked plugin.");
 }
 
-export default function loader() {}
+export default function loader(compilation) {
+  if(compilation) {
+    console.info("Started worker-loader with compilation.");
+  }
+  else {
+    console.warn("Started worker-loader WITHOUT compilation!");
+  }
+}
 
 export function pitch(request) {
 	this.cacheable(false);
