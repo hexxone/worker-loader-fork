@@ -16,7 +16,7 @@ function getOptions(loaderContext) {
 
   const webpack5Query = loaderContext._module.resourceResolveData.query || ""; // eslint-disable-next-line no-console
 
-  console.log("Custom getOptions query ", query, webpack5Query);
+  console.log(`[worker-loader-fork] Custom getOptions query: '${JSON.stringify(query)}' '${JSON.stringify(webpack5Query)}'`);
 
   if (typeof query === "string" && query !== "") {
     return (0, _parseQuery.default)(query);
