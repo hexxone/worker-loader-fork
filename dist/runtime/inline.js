@@ -1,15 +1,13 @@
 "use strict";
 
 /* eslint-env browser */
-
 /* eslint-disable no-undef, no-use-before-define, new-cap */
+
 module.exports = function (content, workerConstructor, workerOptions, url) {
   var globalScope = self || window;
-
   try {
     try {
       var blob;
-
       try {
         // New API
         blob = new globalScope.Blob([content]);
@@ -20,7 +18,6 @@ module.exports = function (content, workerConstructor, workerOptions, url) {
         blob.append(content);
         blob = blob.getBlob();
       }
-
       var URL = globalScope.URL || globalScope.webkitURL;
       var objectURL = URL.createObjectURL(blob);
       var worker = new globalScope[workerConstructor](objectURL, workerOptions);
@@ -33,7 +30,6 @@ module.exports = function (content, workerConstructor, workerOptions, url) {
     if (!url) {
       throw Error("Inline worker is not supported");
     }
-
     return new globalScope[workerConstructor](url, workerOptions);
   }
 };
