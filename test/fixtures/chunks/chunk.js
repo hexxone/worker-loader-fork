@@ -1,3 +1,4 @@
-export function returnTrue() {
-  return true;
+/* eslint-env browser */
+export default function returnTrue() {
+    return true;
 }

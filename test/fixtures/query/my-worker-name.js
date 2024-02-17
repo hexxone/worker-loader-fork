@@ -1,7 +1,9 @@
-onmessage = function(event) {
-  const workerResult = event.data;
+/* eslint-env browser */
 
-  workerResult.onmessage = true;
+onmessage = (event) => {
+    const workerResult = event.data;
 
-  postMessage(workerResult);
+    workerResult.onmessage = true;
+
+    postMessage(workerResult);
 };

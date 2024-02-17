@@ -1,9 +1,10 @@
-import foo from 'my-custom-module';
+/* eslint-env browser */
+// import foo from 'my-custom-module';
 
-onmessage = function(event) {
-  const workerResult = event.data;
+onmessage = (event) => {
+    const workerResult = event.data;
 
-  workerResult.onmessage = true;
+    workerResult.onmessage = true;
 
-  postMessage(workerResult);
+    postMessage(workerResult);
 };

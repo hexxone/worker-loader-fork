@@ -28,7 +28,7 @@ module.exports = function (content, workerConstructor, workerOptions, url) {
     }
   } catch (e) {
     if (!url) {
-      throw Error("Inline worker is not supported");
+      throw Error('Inline worker is not supported');
     }
     return new globalScope[workerConstructor](url, workerOptions);
   }

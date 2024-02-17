@@ -20,23 +20,23 @@ var _getOptions = _interopRequireDefault(require("./getOptions"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 // wasm Plugins
 
-const useWebpack5 = require("webpack/package.json").version.startsWith("5.");
+const useWebpack5 = require('webpack/package.json').version.startsWith('5.');
 if (!useWebpack5) {
-  throw new Error("Please upgrade to webpack 5, or use the non-forked plugin.");
+  throw new Error('Please upgrade to webpack 5, or use the non-forked plugin.');
 }
 function loader(compilation) {
   if (compilation) {
-    console.info("Started worker-loader with compilation.");
+    console.info('Started worker-loader with compilation.');
   } else {
-    console.warn("Started worker-loader WITHOUT compilation!");
+    console.warn('Started worker-loader WITHOUT compilation!');
   }
 }
 function pitch(request) {
   this.cacheable(false);
   const options = (0, _getOptions.default)(this);
   (0, _schemaUtils.validate)(_options.default, options, {
-    name: "Worker Loader",
-    baseDataPath: "options"
+    name: 'Worker Loader',
+    baseDataPath: 'options'
   });
   const workerContext = {};
   const compilerOptions = this._compiler.options || {};
@@ -47,11 +47,11 @@ function pitch(request) {
     filename,
     chunkFilename,
     publicPath,
-    globalObject: "self"
+    globalObject: 'self'
   };
   workerContext.compiler = this._compilation.createChildCompiler(`worker-loader ${request}`, workerContext.options);
   new _WebWorkerTemplatePlugin.default().apply(workerContext.compiler);
-  if (this.target !== "webworker" && this.target !== "web") {
+  if (this.target !== 'webworker' && this.target !== 'web') {
     new _NodeTargetPlugin.default().apply(workerContext.compiler);
   }
   if (_FetchCompileWasmPlugin.default) {
@@ -68,9 +68,11 @@ function pitch(request) {
   new _SingleEntryPlugin.default(this.context, `!!${request}`, _path.default.parse(this.resourcePath).name).apply(workerContext.compiler);
   workerContext.request = request;
   const cb = this.async();
-  if (!(workerContext.compiler.cache && typeof workerContext.compiler.cache.get === "function"))
+  if (!(workerContext.compiler.cache && typeof workerContext.compiler.cache.get === 'function'))
     // eslint-disable-next-line no-console
-    console.error("ERROR COMPILE", workerContext.compiler);
+    {
+      console.error('ERROR COMPILE', workerContext.compiler);
+    }
   runAsChild(this, workerContext, options, cb);
 }
 function runAsChild(loaderContext, workerContext, options, callback) {
@@ -80,14 +82,14 @@ function runAsChild(loaderContext, workerContext, options, callback) {
     }
     if (entries[0]) {
       const [workerFilename] = [...entries[0].files];
-      const cache = workerContext.compiler.getCache("worker-loader");
+      const cache = workerContext.compiler.getCache('worker-loader');
       const cacheIdent = workerFilename;
       const cacheETag = cache.getLazyHashedEtag(compilation.assets[workerFilename]);
       return cache.get(cacheIdent, cacheETag, (getCacheError, content) => {
         if (getCacheError) {
           return callback(getCacheError);
         }
-        if (options.inline === "no-fallback") {
+        if (options.inline === 'no-fallback') {
           // eslint-disable-next-line no-underscore-dangle, no-param-reassign
           delete loaderContext._compilation.assets[workerFilename];
 
@@ -102,12 +104,12 @@ function runAsChild(loaderContext, workerContext, options, callback) {
           return callback(null, content);
         }
         let workerSource = compilation.assets[workerFilename].source();
-        if (options.inline === "no-fallback") {
+        if (options.inline === 'no-fallback') {
           // Remove `/* sourceMappingURL=url */` comment
-          workerSource = workerSource.replace(_utils.sourceMappingURLRegex, "");
+          workerSource = workerSource.replace(_utils.sourceMappingURLRegex, '');
 
           // Remove `//# sourceURL=webpack-internal` comment
-          workerSource = workerSource.replace(_utils.sourceURLWebpackRegex, "");
+          workerSource = workerSource.replace(_utils.sourceURLWebpackRegex, '');
         }
         const workerCode = (0, _utils.workerGenerator)(loaderContext, workerFilename, workerSource, options);
         const workerCodeBuffer = Buffer.from(workerCode);

@@ -1,13 +1,15 @@
+/* eslint-env browser */
 async function loadChunk() {
-  return import(/* webpackMode: "lazy" */ './chunk');
+    // eslint-disable-next-line global-require
+    return require(/* webpackMode: "lazy" */ './chunk');
 }
 
-onmessage = async function(event) {
-  const { returnTrue } = await loadChunk();
+onmessage = async (event) => {
+    const { returnTrue } = await loadChunk();
 
-  const workerResult = event.data;
+    const workerResult = event.data;
 
-  workerResult.onmessage = returnTrue();
+    workerResult.onmessage = returnTrue();
 
-  postMessage(workerResult);
+    postMessage(workerResult);
 };

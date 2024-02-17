@@ -21,16 +21,16 @@ function getExternalsType(compilerOptions) {
     return compilerOptions.output.library.type;
   }
   if (compilerOptions.output.module) {
-    return "module";
+    return 'module';
   }
-  return "var";
+  return 'var';
 }
 function workerGenerator(loaderContext, workerFilename, workerSource, options) {
   let workerConstructor;
   let workerOptions;
-  if (typeof options.worker === "undefined") {
-    workerConstructor = "Worker";
-  } else if (typeof options.worker === "string") {
+  if (typeof options.worker === 'undefined') {
+    workerConstructor = 'Worker';
+  } else if (typeof options.worker === 'string') {
     workerConstructor = options.worker;
   } else {
     ({
@@ -38,28 +38,28 @@ function workerGenerator(loaderContext, workerFilename, workerSource, options) {
       options: workerOptions
     } = options.worker);
   }
-  const esModule = typeof options.esModule !== "undefined" ? options.esModule : true;
+  const esModule = typeof options.esModule !== 'undefined' ? options.esModule : true;
   const fnName = `${workerConstructor}_fn`;
   if (options.inline) {
-    const InlineWorkerPath = (0, _stringifyRequest.stringifyRequest)(loaderContext, `!!${require.resolve("./runtime/inline.js")}`);
+    const InlineWorkerPath = (0, _stringifyRequest.stringifyRequest)(loaderContext, `!!${require.resolve('./runtime/inline.js')}`);
     let fallbackWorkerPath;
-    if (options.inline === "fallback") {
+    if (options.inline === 'fallback') {
       fallbackWorkerPath = `__webpack_public_path__ + ${JSON.stringify(workerFilename)}`;
     }
     return `
 ${esModule ? `import worker from ${InlineWorkerPath};` : `var worker = require(${InlineWorkerPath});`}
 
-${esModule ? "export default" : "module.exports ="} function ${fnName}() {\n  return worker(${JSON.stringify(workerSource)}, ${JSON.stringify(workerConstructor)}, ${JSON.stringify(workerOptions)}, ${fallbackWorkerPath});\n}\n`;
+${esModule ? 'export default' : 'module.exports ='} function ${fnName}() {\n  return worker(${JSON.stringify(workerSource)}, ${JSON.stringify(workerConstructor)}, ${JSON.stringify(workerOptions)}, ${fallbackWorkerPath});\n}\n`;
   }
-  return `${esModule ? "export default" : "module.exports ="} function ${fnName}() {\n  return new ${workerConstructor}(__webpack_public_path__ + ${JSON.stringify(workerFilename)}${workerOptions ? `, ${JSON.stringify(workerOptions)}` : ""});\n}\n`;
+  return `${esModule ? 'export default' : 'module.exports ='} function ${fnName}() {\n  return new ${workerConstructor}(__webpack_public_path__ + ${JSON.stringify(workerFilename)}${workerOptions ? `, ${JSON.stringify(workerOptions)}` : ''});\n}\n`;
 }
 
 // Matches only the last occurrence of sourceMappingURL
 const innerRegex = /\s*[#@]\s*sourceMappingURL\s*=\s*(.*?(?=[\s'"]|\\n|\*\/|$)(?:\\n)?)\s*/;
 
 /* eslint-disable prefer-template */
-const sourceMappingURLRegex = RegExp("(?:" + "/\\*" + "(?:\\s*\r?\n(?://)?)?" + "(?:" + innerRegex.source + ")" + "\\s*" + "\\*/" + "|" + "//(?:" + innerRegex.source + ")" + ")" + "\\s*");
+const sourceMappingURLRegex = RegExp('(?:' + '/\\*' + '(?:\\s*\r?\n(?://)?)?' + '(?:' + innerRegex.source + ')' + '\\s*' + '\\*/' + '|' + '//(?:' + innerRegex.source + ')' + ')' + '\\s*');
 exports.sourceMappingURLRegex = sourceMappingURLRegex;
-const sourceURLWebpackRegex = RegExp("\\/\\/#\\ssourceURL=webpack-internal:\\/\\/\\/(.*?)\\\\n");
+const sourceURLWebpackRegex = RegExp('\\/\\/#\\ssourceURL=webpack-internal:\\/\\/\\/(.*?)\\\\n');
 /* eslint-enable prefer-template */
 exports.sourceURLWebpackRegex = sourceURLWebpackRegex;
