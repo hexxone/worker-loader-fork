@@ -1,9 +1,11 @@
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('worker-loader', () => {
     it('should work', async () => {
@@ -24,9 +26,9 @@ describe('worker-loader', () => {
         const stats = await compile(compiler);
         const result = await getResultFromBrowser(stats);
 
-        expect(getModuleSource('./query/my-worker-name.js', stats)).toMatchSnapshot(
-            'module'
-        );
+        expect(
+            getModuleSource('./query/my-worker-name.js', stats)
+        ).toMatchSnapshot('module');
         expect(result).toMatchSnapshot('result');
         expect(getWarnings(stats)).toMatchSnapshot('warnings');
         expect(getErrors(stats)).toMatchSnapshot('errors');
@@ -100,9 +102,13 @@ describe('worker-loader', () => {
     });
 
     it('should work and respect the "devtool" option ("false" value)', async () => {
-        const compiler = getCompiler('./basic/entry.js', {}, {
-            devtool: false
-        });
+        const compiler = getCompiler(
+            './basic/entry.js',
+            {},
+            {
+                devtool: false
+            }
+        );
         const stats = await compile(compiler);
         const result = await getResultFromBrowser(stats);
 
@@ -122,9 +128,9 @@ describe('worker-loader', () => {
         const stats = await compile(compiler);
         const result = await getResultFromBrowser(stats);
 
-        expect(getModuleSource('./name/TypeDetection.js', stats)).toMatchSnapshot(
-            'module'
-        );
+        expect(
+            getModuleSource('./name/TypeDetection.js', stats)
+        ).toMatchSnapshot('module');
         expect(result).toMatchSnapshot('result');
         expect(getWarnings(stats)).toMatchSnapshot('warnings');
         expect(getErrors(stats)).toMatchSnapshot('errors');

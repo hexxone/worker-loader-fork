@@ -2,12 +2,14 @@ import path from 'path';
 
 import { customAlphabet } from 'nanoid';
 
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('"name" option', () => {
     it('should work ("string")', async () => {
@@ -32,7 +34,11 @@ describe('"name" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].js',
                     publicPath: ''
                 },
@@ -68,7 +74,11 @@ describe('"name" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].js',
                     chunkFilename: '[name].chunk.js',
                     publicPath: ''
@@ -105,7 +115,11 @@ describe('"name" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].js',
                     chunkFilename: '[name].chunk.js?foo=bar&baz=bar',
                     publicPath: ''

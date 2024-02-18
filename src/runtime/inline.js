@@ -14,10 +14,10 @@ module.exports = (content, workerConstructor, workerOptions, url) => {
             } catch (e) {
                 // BlobBuilder = Deprecated, but widely implemented
                 const BlobBuilder
-          = globalScope.BlobBuilder
-          || globalScope.WebKitBlobBuilder
-          || globalScope.MozBlobBuilder
-          || globalScope.MSBlobBuilder;
+                    = globalScope.BlobBuilder
+                    || globalScope.WebKitBlobBuilder
+                    || globalScope.MozBlobBuilder
+                    || globalScope.MSBlobBuilder;
 
                 blob = new BlobBuilder();
 

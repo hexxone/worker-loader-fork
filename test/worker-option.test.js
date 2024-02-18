@@ -1,9 +1,11 @@
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('"workerType" option', () => {
     it('should use "Worker" by default', async () => {
@@ -73,7 +75,8 @@ describe('"workerType" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') > 0
+            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') >
+                0
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeDefined();
         expect(result).toMatchSnapshot('result');
@@ -99,7 +102,9 @@ describe('"workerType" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeUndefined();
         expect(result).toMatchSnapshot('result');

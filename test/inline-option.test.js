@@ -1,9 +1,11 @@
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('"inline" option', () => {
     it('should not work by default', async () => {
@@ -30,7 +32,9 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeUndefined();
         expect(result).toMatchSnapshot('result');
@@ -54,7 +58,9 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(
             moduleSource.indexOf('sourceMappingURL=test.worker.js.map"') === -1
@@ -85,7 +91,9 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(
             moduleSource.indexOf(
@@ -116,7 +124,9 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeUndefined();
         expect(stats.compilation.assets['test.worker.js.map']).toBeUndefined();
@@ -135,7 +145,8 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') > 0
+            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') >
+                0
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeDefined();
         expect(result).toMatchSnapshot('result');
@@ -159,7 +170,8 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') > 0
+            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') >
+                0
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeDefined();
         expect(stats.compilation.assets['test.worker.js.map']).toBeDefined();
@@ -184,7 +196,8 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') > 0
+            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') >
+                0
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeDefined();
         expect(stats.compilation.assets['test.worker.js.map']).toBeUndefined();
@@ -204,7 +217,9 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeUndefined();
         expect(result).toMatchSnapshot('result');
@@ -223,7 +238,9 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') === -1
+            moduleSource.indexOf(
+                '__webpack_public_path__ + "test.worker.js"'
+            ) === -1
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeUndefined();
         expect(result).toMatchSnapshot('result');
@@ -242,7 +259,8 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') > 0
+            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') >
+                0
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeDefined();
         expect(result).toMatchSnapshot('result');
@@ -261,7 +279,8 @@ describe('"inline" option', () => {
 
         expect(moduleSource.indexOf('inline.js') > 0).toBe(true);
         expect(
-            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') > 0
+            moduleSource.indexOf('__webpack_public_path__ + "test.worker.js"') >
+                0
         ).toBe(true);
         expect(stats.compilation.assets['test.worker.js']).toBeDefined();
         expect(result).toMatchSnapshot('result');

@@ -40,16 +40,25 @@ describe('validate options', () => {
         },
         unknown: {
             success: [],
-            failure: [1, true, false, 'test', /test/, [], {}, {
-                foo: 'bar'
-            }]
+            failure: [
+                1,
+                true,
+                false,
+                'test',
+                /test/,
+                [],
+                {},
+                {
+                    foo: 'bar'
+                }
+            ]
         }
     };
 
     function stringifyValue(value) {
         if (
-            Array.isArray(value)
-      || (value && typeof value === 'object' && value.constructor === Object)
+            Array.isArray(value) ||
+            (value && typeof value === 'object' && value.constructor === Object)
         ) {
             return JSON.stringify(value);
         }

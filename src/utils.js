@@ -1,3 +1,6 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import { stringifyRequest } from './stringifyRequest';
 
 function getExternalsType(compilerOptions) {
@@ -35,7 +38,7 @@ function workerGenerator(loaderContext, workerFilename, workerSource, options) {
     }
 
     const esModule
-		= typeof options.esModule !== 'undefined' ? options.esModule : true;
+        = typeof options.esModule !== 'undefined' ? options.esModule : true;
     const fnName = `${workerConstructor}_fn`;
 
     if (options.inline) {
@@ -77,24 +80,24 @@ ${
 
 // Matches only the last occurrence of sourceMappingURL
 const innerRegex
-	= /\s*[#@]\s*sourceMappingURL\s*=\s*(.*?(?=[\s'"]|\\n|\*\/|$)(?:\\n)?)\s*/;
+    = /\s*[#@]\s*sourceMappingURL\s*=\s*(.*?(?=[\s'"]|\\n|\*\/|$)(?:\\n)?)\s*/;
 
 /* eslint-disable prefer-template */
 const sourceMappingURLRegex = RegExp(
     '(?:'
-		+ '/\\*'
-		+ '(?:\\s*\r?\n(?://)?)?'
-		+ '(?:'
-		+ innerRegex.source
-		+ ')'
-		+ '\\s*'
-		+ '\\*/'
-		+ '|'
-		+ '//(?:'
-		+ innerRegex.source
-		+ ')'
-		+ ')'
-		+ '\\s*'
+        + '/\\*'
+        + '(?:\\s*\r?\n(?://)?)?'
+        + '(?:'
+        + innerRegex.source
+        + ')'
+        + '\\s*'
+        + '\\*/'
+        + '|'
+        + '//(?:'
+        + innerRegex.source
+        + ')'
+        + ')'
+        + '\\s*'
 );
 
 const sourceURLWebpackRegex = RegExp(

@@ -25,7 +25,10 @@ export default async function getResultFromBrowser(stats) {
 
         [route] = route.split('?');
 
-        const existsAt = path.resolve(stats.compilation.outputOptions.path, route);
+        const existsAt = path.resolve(
+            stats.compilation.outputOptions.path,
+            route
+        );
 
         if (route === 'index.html') {
             app.get('/', (req, res) => {
@@ -41,22 +44,13 @@ export default async function getResultFromBrowser(stats) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    page
-        .on('console', (message) =>
+    // eslint-disable-next-line no-console
+    page.on('console', (message) => console.log(message))
         // eslint-disable-next-line no-console
-        console.log(message)
-        )
-        .on('pageerror', ({ message }) =>
+        .on('pageerror', ({ message }) => console.log(message))
         // eslint-disable-next-line no-console
-        console.log(message)
-        )
-    // .on('response', (response) =>
-    //   // eslint-disable-next-line no-console
-    //   console.log(`${response.status()} ${response.url()}`)
-    // )
         .on('requestfailed', (request) =>
-        // eslint-disable-next-line no-console
-        console.log(`${request.failure().errorText} ${request.url()}`)
+            console.log(`${request.failure().errorText} ${request.url()}`)
         );
 
     await page.goto(`http://127.0.0.1:${port}/`);

@@ -2,12 +2,14 @@ import path from 'path';
 
 import { customAlphabet } from 'nanoid';
 
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('"publicPath" option', () => {
     it('should work and use "__webpack_public_path__" by default', async () => {
@@ -60,7 +62,11 @@ describe('"publicPath" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].bundle.js',
                     chunkFilename: '[name].chunk.js',
                     publicPath: ''
@@ -86,7 +92,11 @@ describe('"publicPath" option', () => {
             {
                 output: {
                     publicPath: '/public-path-static/',
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].bundle.js',
                     chunkFilename: '[name].chunk.js'
                 }
@@ -111,7 +121,11 @@ describe('"publicPath" option', () => {
             {
                 output: {
                     publicPath: () => '/public-path-static/',
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].bundle.js',
                     chunkFilename: '[name].chunk.js'
                 }
@@ -148,7 +162,11 @@ describe('"publicPath" option', () => {
                 },
                 output: {
                     publicPath: '/public-path-static-other/',
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: 'other-static/js/[name].bundle.js',
                     chunkFilename: 'other-static/js/[name].chunk.js'
                 }

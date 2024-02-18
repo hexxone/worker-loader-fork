@@ -1,3 +1,6 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const path = require('path');
 
 const matchRelativePath = /^\.\.?[/\\]/;
@@ -13,8 +16,8 @@ function isRelativePath(str) {
 export default function stringifyRequest(loaderContext, request) {
     const splitted = request.split('!');
     const context
-		= loaderContext.context
-		|| (loaderContext.options && loaderContext.options.context);
+        = loaderContext.context
+        || (loaderContext.options && loaderContext.options.context);
 
     return JSON.stringify(
         splitted

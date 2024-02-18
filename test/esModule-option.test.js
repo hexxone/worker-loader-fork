@@ -1,9 +1,11 @@
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('"esModule" option', () => {
     it('should work and generate ES module syntax by default', async () => {

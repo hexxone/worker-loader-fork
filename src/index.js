@@ -1,4 +1,7 @@
-/* eslint-disable no-console */
+/* eslint-disable no-invalid-this */
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import path from 'path';
 
 import { validate } from 'schema-utils';
@@ -24,7 +27,9 @@ import getOptions from './getOptions';
 const useWebpack5 = require('webpack/package.json').version.startsWith('5.');
 
 if (!useWebpack5) {
-    throw new Error('Please upgrade to webpack 5, or use the non-forked plugin.');
+    throw new Error(
+        'Please upgrade to webpack 5, or use the non-forked plugin.'
+    );
 }
 
 export default function loader(compilation) {
@@ -108,11 +113,12 @@ export function pitch(request) {
     if (
         !(
             workerContext.compiler.cache
-			&& typeof workerContext.compiler.cache.get === 'function'
+            && typeof workerContext.compiler.cache.get === 'function'
         )
-    )
-    // eslint-disable-next-line no-console
-    { console.error('ERROR COMPILE', workerContext.compiler); }
+    ) {
+        // eslint-disable-next-line no-console
+        console.error('ERROR COMPILE', workerContext.compiler);
+    }
 
     runAsChild(this, workerContext, options, cb);
 }
@@ -131,58 +137,77 @@ export function runAsChild(loaderContext, workerContext, options, callback) {
                 compilation.assets[workerFilename]
             );
 
-            return cache.get(cacheIdent, cacheETag, (getCacheError, content) => {
-                if (getCacheError) {
-                    return callback(getCacheError);
-                }
+            return cache.get(
+                cacheIdent,
+                cacheETag,
+                (getCacheError, content) => {
+                    if (getCacheError) {
+                        return callback(getCacheError);
+                    }
 
-                if (options.inline === 'no-fallback') {
-                    // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-                    delete loaderContext._compilation.assets[workerFilename];
-
-                    // TODO improve this, we should store generated source maps files for file in `assetInfo`
-                    // eslint-disable-next-line no-underscore-dangle
-                    if (loaderContext._compilation.assets[`${workerFilename}.map`]) {
+                    if (options.inline === 'no-fallback') {
                         // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-                        delete loaderContext._compilation.assets[`${workerFilename}.map`];
-                    }
-                }
+                        delete loaderContext._compilation.assets[
+                            workerFilename
+                        ];
 
-                if (content) {
-                    return callback(null, content);
-                }
-
-                let workerSource = compilation.assets[workerFilename].source();
-
-                if (options.inline === 'no-fallback') {
-                    // Remove `/* sourceMappingURL=url */` comment
-                    workerSource = workerSource.replace(sourceMappingURLRegex, '');
-
-                    // Remove `//# sourceURL=webpack-internal` comment
-                    workerSource = workerSource.replace(sourceURLWebpackRegex, '');
-                }
-
-                const workerCode = workerGenerator(
-                    loaderContext,
-                    workerFilename,
-                    workerSource,
-                    options
-                );
-                const workerCodeBuffer = Buffer.from(workerCode);
-
-                return cache.store(
-                    cacheIdent,
-                    cacheETag,
-                    workerCodeBuffer,
-                    (storeCacheError) => {
-                        if (storeCacheError) {
-                            return callback(storeCacheError);
+                        // TODO improve this, we should store generated source maps files for file in `assetInfo`
+                        // eslint-disable-next-line no-underscore-dangle
+                        if (
+                            loaderContext._compilation.assets[
+                                `${workerFilename}.map`
+                            ]
+                        ) {
+                            // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+                            delete loaderContext._compilation.assets[
+                                `${workerFilename}.map`
+                            ];
                         }
-
-                        return callback(null, workerCodeBuffer);
                     }
-                );
-            });
+
+                    if (content) {
+                        return callback(null, content);
+                    }
+
+                    let workerSource
+                        = compilation.assets[workerFilename].source();
+
+                    if (options.inline === 'no-fallback') {
+                        // Remove `/* sourceMappingURL=url */` comment
+                        workerSource = workerSource.replace(
+                            sourceMappingURLRegex,
+                            ''
+                        );
+
+                        // Remove `//# sourceURL=webpack-internal` comment
+                        workerSource = workerSource.replace(
+                            sourceURLWebpackRegex,
+                            ''
+                        );
+                    }
+
+                    const workerCode = workerGenerator(
+                        loaderContext,
+                        workerFilename,
+                        workerSource,
+                        options
+                    );
+                    const workerCodeBuffer = Buffer.from(workerCode);
+
+                    return cache.store(
+                        cacheIdent,
+                        cacheETag,
+                        workerCodeBuffer,
+                        (storeCacheError) => {
+                            if (storeCacheError) {
+                                return callback(storeCacheError);
+                            }
+
+                            return callback(null, workerCodeBuffer);
+                        }
+                    );
+                }
+            );
         }
 
         return callback(

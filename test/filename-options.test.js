@@ -2,12 +2,14 @@ import path from 'path';
 
 import { customAlphabet } from 'nanoid';
 
-import { compile,
+import {
+    compile,
     getCompiler,
     getErrors,
     getModuleSource,
     getResultFromBrowser,
-    getWarnings } from './helpers';
+    getWarnings
+} from './helpers';
 
 describe('"filename" option', () => {
     it('should work ("string")', async () => {
@@ -47,7 +49,11 @@ describe('"filename" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     chunkFilename: '[name].chunk.js',
                     publicPath: ''
                 },
@@ -83,7 +89,11 @@ describe('"filename" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: '[name].custom.js',
                     chunkFilename: '[name].chunk.js',
                     publicPath: ''
@@ -120,9 +130,17 @@ describe('"filename" option', () => {
             {},
             {
                 output: {
-                    path: path.resolve(__dirname, './outputs', `test_${nanoid()}`),
+                    path: path.resolve(
+                        __dirname,
+                        './outputs',
+                        `test_${nanoid()}`
+                    ),
                     filename: (pathData) => {
-                        if ((/worker\.js$/).test(pathData.chunk.entryModule.resource)) {
+                        if (
+                            /worker\.js$/.test(
+                                pathData.chunk.entryModule.resource
+                            )
+                        ) {
                             return '[name].custom.worker.js';
                         }
 
